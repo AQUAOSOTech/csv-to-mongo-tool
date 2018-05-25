@@ -1,0 +1,29 @@
+{
+  "name": "well-data-mongo-import",
+  "version": "1.0.0",
+  "description": "",
+  "main": "import.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AQUAOSOTech/csv-to-mongo-tool.git"
+  },
+  "keywords": [],
+  "author": "Jeff H. Parrish <jeffhparrish@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/AQUAOSOTech/csv-to-mongo-tool/issues"
+  },
+  "homepage": "https://github.com/AQUAOSOTech/csv-to-mongo-tool",
+  "dependencies": {
+    "csvtojson": "^2.0.0",
+    "lodash": "^4.17.10",
+    "mongoose": "^5.1.2",
+    "shortid": "^2.2.8"
+  },
+  "devDependencies": {
+    "standard": "^11.0.1"
+  }
+}
