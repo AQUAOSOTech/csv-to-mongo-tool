@@ -6,15 +6,15 @@ const _ = require('lodash')
 const mongoose = require('mongoose')
 const shortid = require('shortid')
 
-const headers = require('./headers')
-
 const {MONGO_URI, CSV_FILE, MODEL_NAME} = process.env
 const log = console.log
 
 if (!MONGO_URI || !CSV_FILE || !MODEL_NAME) {
-  log(`Usage:
-  MONGO_URI=mongodb://localhost/petdb CSV_FILE=mypets.csv MODEL_NAME=Pets node import.js
+  log(`
+  Usage:
+    MONGO_URI=mongodb://localhost/petdb CSV_FILE=mypets.csv MODEL_NAME=Pets node import.js
 `)
+  process.exit(1)
 }
 
 const start = +new Date()
@@ -38,10 +38,7 @@ mongoose.connect(MONGO_URI)
   .then(() => {
     log('Parsing csv to objects...')
 
-    return csv({
-      noheader: true,
-      headers,
-    })
+    return csv()
       .fromStream(fs.createReadStream(CSV_FILE))
       .subscribe((json) => {
         cursor++
