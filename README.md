@@ -15,3 +15,8 @@ cd path/to/csv-to-mongo-tool
 npm install
 MONGO_URI=mongodb://localhost/petdb CSV_FILE=mypets.csv MODEL_NAME=Pets node import.js
 ```
+
+## About
+
+Parsing and inserting happens per-line so it is slightly slower but a huge number of records can 
+be imported using minimal memory.

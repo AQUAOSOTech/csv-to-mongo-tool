@@ -32,7 +32,7 @@ const Model = mongoose.model(MODEL_NAME, new mongoose.Schema({
 
 log({ MONGO_URI, CSV_FILE })
 
-let completionCursor = 0
+let cursor = 0
 
 mongoose.connect(MONGO_URI)
   .then(() => {
@@ -44,8 +44,8 @@ mongoose.connect(MONGO_URI)
     })
       .fromStream(fs.createReadStream(CSV_FILE))
       .subscribe((json) => {
-        completionCursor++
-        log(`completion: ${completionCursor}`)
+        cursor++
+        log(`Importing line: ${cursor}`)
 
         return new Model(preprocess(json)).save()
       })
