@@ -34,14 +34,16 @@ mongoose.connect(MONGO_URI)
   .then(() => {
     log('Parsing csv to objects...')
 
-    return csv()
-      .fromStream(fs.createReadStream(CSV_FILE))
-      .subscribe((json) => {
-        cursor++
-        log(`Importing line: ${cursor}`)
+    return new Promise((resolve, reject) => {
+      csv()
+        .fromStream(fs.createReadStream(CSV_FILE))
+        .subscribe((json) => {
+          cursor++
+          log(`Importing line: ${cursor}`)
 
-        return new Model(preprocess(json)).save()
-      })
+          return new Model(preprocess(json)).save()
+        }, reject, resolve)
+    })
   })
   .then(() => {
     const runtime = (+new Date() - start) / 1000 / 60
@@ -65,9 +67,9 @@ function preprocess (json) {
 
     if (value) {
       if (k.toLowerCase().includes('date')) {
-        json[k] = new Date(json[k])
+        value = new Date(json[k])
       } else if (isNumeric(json[k])) {
-        json[k] = parseFloat(json[k])
+        value = parseFloat(json[k], 10)
       }
     } else if (value === null || value === '') {
       delete json[k]
@@ -81,5 +83,5 @@ function preprocess (json) {
 }
 
 function isNumeric (n) {
-  return !isNaN(n)
+  return !isNaN(n) && n !== ''
 }
