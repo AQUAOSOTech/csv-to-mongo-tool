@@ -22,11 +22,7 @@ const start = +new Date()
 const Model = mongoose.model(MODEL_NAME, new mongoose.Schema({
   _id: {
     type: String,
-    default: () => `wcr-${shortid()}`
-  },
-  objectId: {
-    type: String,
-    unique: true
+    default: () => `${MODEL_NAME.substring(0, 3).toLowerCase()}-${shortid()}`
   }
 }, { strict: false }))
 
@@ -58,25 +54,32 @@ mongoose.connect(MONGO_URI)
     process.exit(1)
   })
 
-
-function preprocess(json) {
+function preprocess (json) {
   // camelCase keys
   json = _.mapKeys(json, (v, k) => _.camelCase(k))
 
-  let value;
+  let value
+
   Object.keys(json).forEach((k) => {
     value = json[k].trim()
 
     if (value) {
       if (k.toLowerCase().includes('date')) {
         json[k] = new Date(json[k])
-      } else if (_.isNumber(json[k])) {
+      } else if (isNumeric(json[k])) {
         json[k] = parseFloat(json[k])
       }
+    } else if (value === null || value === '') {
+      delete json[k]
+      return
     }
 
-    json[k] = value;
+    json[k] = value
   })
 
   return json
+}
+
+function isNumeric (n) {
+  return !isNaN(n)
 }
